@@ -1,0 +1,92 @@
+algoritmo Monitoramento_de_Saude;
+/*  Síntese : Este programa possibilita a análise de dados de uma equipe, e foi projetado para ser utilizado com pessoas de idade 
+    igual ou superior a 5 anos. Caso contrário, o programa lê e retorna a mensagem de dados inválidos.*/
+//  Objetivo: Possibilitar avaliação de informações sobre a equipe de forma geral.
+//  Entrada : Quantidade de integrantes da equipe, e dados sobre os integrantes da equipe (idade, massa, altura).
+/*  Saída   : Índice de massa corporal individual, quantidade de menores de idade na equipe, percentual de pessoas 
+    abaixo de 1.65m, e o imc médio da equipe.*/
+
+
+principal
+	// Declarações
+	inteiro contador, idade, menores, anoes, n;
+    real massa, altura, percentual_anoes, imc_soma, imc_medio;
+
+	// Instruções
+    //Aqui apresento o programa e inicio a execução baseado no número de integrantes da equipe
+    escreval ("Bem-vindo ao seu gerenciador de equipe! Este é um programa projetado para gerenciar equipes de forma geral (alunos de uma sala de aula, atletas de um time, funcionários de uma empresa, entre outras aplicações) cujos integrantes tenham idade igual ou superior a 5 anos. Aqui você irá fornecer os dados solicitados a respeito de cada integrante, e receberá imediatamente o seu Índice de Massa Corporal. Posteriormente, dados sobre a equipe de forma geral serão mostrados na tela, para que sejam avaliados e possam te ajudar a tomar alguma medida preventiva ou remediativa que julgue necessária.");
+	escreval ("");
+	escreval ("Digite o número de integrantes da sua equipe.");
+	leia (n);
+	escreval ("Agora digite a idade, massa, e altura de cada integrante.");
+
+    //Declaro nulas algumas variáveis que serão utilizadas para as somas em loops
+    menores = 0;
+	anoes = 0;
+	imc_soma = 0;
+    //E aqui chego na parte principal, onde leio as variáveis básicas para o programa, realizo as operações, chamo as funções, e por fim, retorno os resultados ao usuário
+	para (contador de 1 ate n passo 1) faca
+	    leia (idade);
+	    leia (massa);
+	    leia (altura);
+	    se (idade < 5 ou massa < 10 ou altura < 1) entao
+	        escreval ("DADOS INVÁLIDOS");
+	    senao    
+	        se (idade < 18) entao
+	            menores = menores + 1;
+	        fimSe    
+	        se (altura < 1.65) entao
+	            anoes = anoes + 1;
+	        fimSe
+	    fimSe   
+	    imc_soma = imc_soma + imc(massa, altura); 	    
+		escreval ("O Índice de Massa Corporal do integrante é: " , imc(massa, altura)::2);
+	fimPara
+        percentual_anoes = (anoes/n) * 100;
+        imc_medio = imc_soma/ n;
+        
+        escreval ("");
+        escreval ("DADOS GERAIS DA EQUIPE");
+	    escreval ("O número de integrantes com menos de 18 anos da sua equipe é: " , menores);
+	    escreval ("O percentual de integrantes com menos de 1.65m da sua equipe é: " , percentual_anoes::2 , "%");
+	    escreval ("O IMC médio da sua equipe é " , imc_medio::2, " - classificado como " , prognostico(imc_medio) , "."); 
+	    
+fimPrincipal
+
+funcao real imc (real massa, real altura)
+    //Declarações
+	real indice;
+	//Instruções
+	indice = massa/(exp(altura, 2));
+	retorna indice;
+fimFuncao    
+
+funcao texto prognostico (real imc_medio)
+    //Declarações
+    texto prog;
+    //Instruções
+    se (imc_medio < 18.5) entao
+        prog = "abaixo do peso normal";
+    senao 
+        se (imc_medio < 25 e imc_medio >= 18.5) entao
+            prog = "peso normal";
+        senao
+            se (imc_medio < 30 e imc_medio >= 25) entao
+                prog = "excesso de peso";
+            senao
+                se (imc_medio > 35 e imc_medio >= 30) entao
+                    prog = "obesidade classe I";
+                senao
+                    se (imc_medio < 40 e imc_medio >= 35) entao
+                        prog = "obesidade classe II";
+                    senao
+                        se (imc_medio >= 40) entao 
+                            prog = "obesidade classe III";
+                        fimSe    
+                    fimSe    
+                fimSe    
+            fimSe       
+        fimSe
+   fimSe
+   retorna prog;        
+fimFuncao
